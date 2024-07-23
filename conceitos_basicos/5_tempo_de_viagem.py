@@ -8,8 +8,6 @@ Levando em consideração:
 
 """
 
-distancia = float(input("Olá viajante, qual é a distância do seu percurso? "))
-
 def calcula_tempo(distancia):
     veiculos_velocidade_por_hora = {
         "avião" : 600,
@@ -26,4 +24,12 @@ def calcula_tempo(distancia):
         else:
             print(f"Se você for de {veiculo}, vai levar {tempo_viagem_horas:.0f} horas para chegar ao seu destino.")
 
-calcula_tempo(distancia)
+try: 
+    distancia = float(input("Olá viajante, qual é a distância do seu percurso? "))
+    if distancia <= 0:
+        print("A distância precisa ser maior do que zero.")
+    else:
+        calcula_tempo(distancia)
+
+except ValueError:
+    print("O valor precisa ser válido.")
