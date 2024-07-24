@@ -17,5 +17,5 @@ try:
         print('ERRO: Seu usuário ou senha estão incorretos.')
     
 except Exception as e:
-    print("Ocorreu um erro: {e}")
+    print(f"Ocorreu um erro: {e}")
 

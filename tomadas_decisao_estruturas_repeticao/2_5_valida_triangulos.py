@@ -25,4 +25,4 @@ except ValueError:
     print("Valor inválido.")
 
 except Exception as e:
-    print("Ocorreu um erro: {e}")
+    print(f"Ocorreu um erro: {e}")
