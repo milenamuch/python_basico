@@ -11,35 +11,58 @@ O jogo continua até que o jogador adivinhe a palavra ou exceda o número máxim
 
 Dica: Você precisará importar uma biblioteca para resolver esse exercício
 """
+
 import random
+
+def imprimir_introducao():
+    print("- - - Seja bem-vindo(a) ao jogo da forca das palavras positivas! - - -")
+    print("A palavra da forca completará ao final a frase: 'Você é uma pessoa ________!'")
+    print("Regras do jogo:\n"
+          "-> Você tem direito a 6 tentativas\n"
+          "-> Você só pode digitar uma letra por vez\n"
+          "Boa sorte!")
+
+def validacao_entrada(letra, tentativas_letras):
+    if len(letra) > 1:
+        print("Erro: Você só poderá digitar uma letra por vez.")
+        return False
+    elif letra.isdigit():
+        print("Erro: Você só pode digitar letras.")
+        return False
+    elif letra in tentativas_letras:
+        print(f"Você já digitou a letra {letra}, por favor, tente novamente.")
+        return False
+    tentativas_letras.append(letra)
+    return True
+
+def finaliza_jogo(palavra_escondida, palavra_escolhida, tentativas):
+    if " " not in palavra_escondida:
+        print(f"Parabéns! Você ganhou! A palavra era '{palavra_escolhida}'.")
+        print(f"Aqui está a frase: Você é uma pessoa {palavra_escolhida}!")
+        return True
+    elif tentativas == 0:
+        print(f"Que pena! Você perdeu! A palavra era '{palavra_escolhida}'.")
+        return True
+    return False
+
+def valida_palavra(letra, palavra_escolhida, palavra_escondida):
+    if letra in palavra_escolhida:
+        for i in range(len(palavra_escolhida)):
+            if palavra_escolhida[i] == letra:
+                palavra_escondida[i] = letra
+        print("".join(palavra_escondida))
+    else:
+        print("Desculpe, esta letra não está na palavra.")
+        return False
+    return True
 
 # - - - DECLARAÇÃO DE VARIÁVEIS - - - 
 palavras = [
-    "amorosa",
-    "autoconfiante",
-    "bondosa",
-    "carinhosa",
-    "criativa",
-    "confiante",
-    "corajosa",
-    "decidida",
-    "dedicada",
-    "determinada",
-    "elegante",
-    "energizante",
-    "feliz",
-    "forte",
-    "generosa",
-    "harmoniosa",
-    "inteligente",  
-    "incrível",
-    "legal",
-    "linda",
-    "maravilhosa",
-    "persistente",
-    "próspera",
-    "resiliente",
-    "talentosa",
+    "amorosa", "autoconfiante", "bondosa", "carinhosa", "criativa",
+    "confiante", "corajosa", "decidida", "dedicada", "determinada",
+    "elegante", "energizante", "feliz", "forte", "generosa",
+    "harmoniosa", "inteligente", "incrível", "legal", "linda",
+    "maravilhosa", "persistente", "próspera", "resiliente", "talentosa",
 ]
 
 palavra_escolhida = random.choice(palavras)
@@ -48,53 +71,13 @@ tentativas_letras = []
 tentativas = 6
 
 # - - - INTRODUÇÃO AO JOGADOR E REGRAS - - - 
-print("- - - Seja bem vindo(a) ao jogo da forca das palavras positivas! - - - ")
-print("A palavra da forca, completará ao final a frase: 'Você é uma pessoa ________!' ")
-print("Regras do jogo: \n"
-        "-> Você tem direito a 6 tentativas \n"
-        "-> Você só pode digitar uma letra por vez \n"
-        "Boa sorte!")
+imprimir_introducao()
 
-while True: #O jogador terá um número limitado de 6 tentativas.
-
-    letra = input("Por favor digite a letra: ")
-    letra = letra.lower() #Para deixar todas as letras digitas em minúsculo para facilitar a comparação
-    
-    # - - - VALIDAÇÕES DE USO - - -
-    
-    if len(letra) > 1: #Em cada tentativa, o jogador pode fornecer uma letra.
-        print("Erro: Você só poderá digitar uma letra por vez. ")
-        continue
-    
-    elif letra.isdigit():
-        print("Erro: Você só pode digitar letras.")
-        continue
-    
-    elif letra in tentativas_letras:
-        print(f"Você já digitou a letra {letra}, por favor, tente novamente. ")
-        continue
-    
-    tentativas_letras.append(letra)
-
-    # - - - VALIDAÇÃO DA PALAVRA E ERROS - - - 
-    if letra in palavra_escolhida:
-            for i in range(len(palavra_escolhida)):
-                if palavra_escolhida[i] == letra:
-                    palavra_escondida[i] = letra
-            print("".join(palavra_escondida))
-            
-    else:
-        print("Desculpe, esta letra não está na palavra.")
-        tentativas -= 1
-        print(f"Tentativas restantes: {tentativas}\n")
-        
-    # - - - FINALIZAÇÃO DO JOGO - - - 
-    if " " not in palavra_escondida:
-        print(f"Parabéns! Você ganhou! A palavra era '{palavra_escolhida}'.")
-        print(f"Aqui está a frase: Você é uma pessoa {palavra_escolhida}!")
-        break
-    elif tentativas == 0:
-        print(f"Que pena! Você perdeu! A palavra era '{palavra_escolhida}'.")
-        break
-
-    
+while tentativas > 0:
+    letra = input("Por favor, digite uma letra: ").lower()
+    if validacao_entrada(letra, tentativas_letras):
+        if not valida_palavra(letra, palavra_escolhida, palavra_escondida):
+            tentativas -= 1
+            print(f"Tentativas restantes: {tentativas}")
+        if finaliza_jogo(palavra_escondida, palavra_escolhida, tentativas):
+            break
